@@ -1,6 +1,6 @@
 // pages/demo/demo.js
 const templateMessageUrl = require('../../config').templateMessageUrl
-
+const AV = require('../../utils/av-weapp-min.js')
 var app = getApp()
 
 const formData = {
@@ -24,40 +24,34 @@ Page({
     var self = this
     var form_id = e.detail.formId
     var formData = e.detail.value
-
-    console.log('form_id is:', form_id)
-
+    console.log(e.detail.value)
     self.setData({
       loading: true
     })
-
-    app.getUserOpenId(function (err, openid) {
-      if (!err) {
-        wx.request({
-          url: templateMessageUrl,
-          method: 'POST',
-          data: {
-            form_id,
-            openid,
-            formData
-          },
-          success: function (res) {
-            console.log('submit form success', res)
-            wx.showToast({
-              title: '发送成功',
-              icon: 'success'
-            })
-            self.setData({
-              loading: false
-            })
-          },
-          fail: function ({ errMsg }) {
-            console.log('submit form fail, errMsg is:', errMsg)
-          }
-        })
-      } else {
-        console.log('err:', err)
-      }
+    var Person = AV.Object.extend("MVPPerson");
+    var person = new Person();
+    // console.log(formData.name);
+    person.set("name", formData.name)
+    person.set("sex", formData.sex)
+    person.set("phone", formData.phone)
+    person.set("idCcard", formData.id_card)
+    person.save().then(function (person) {
+      console.log(person.toJSON())
+      wx.showToast({
+        title: '保存成功',
+        // icon: 'success'
+      })
+      self.setData({
+        loading: false
+      })
+    }, function (error) {
+      console.log("" + error)
+      wx.showToast({
+        title: '保存成功',
+      })
+      self.setData({
+        loading: false
+      })
     })
   },
 
@@ -81,7 +75,17 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    console.log("TAG", "onShow")
+    // var ToDo = AV.Object.extend('ToDo');
+    // var todo = new ToDo();
+    // todo.set("title", "This is title1");
+    // todo.set("cntent", "This is content1");
+    // todo.save().then(function (todo) {
+    //   // console.log('New object created with objectId: ' + todo.id);
+    //   console.log(todo.toJSON())
+    // }, function (error) {
+    //   console.error('Failed to create new object, with error message: ' + error.message);
+    // });
   },
 
   /**
