@@ -4,10 +4,7 @@ const AV = require('../../utils/av-weapp-min.js')
 var app = getApp()
 
 const formData = {
-  // address: 'T.I.T 造舰厂',
-  // time: '2017.01.09',
   name: '',
-  // serial: '123456789'
   sex: '',
   phone: '',
   id_card: ''
@@ -86,6 +83,14 @@ Page({
     // }, function (error) {
     //   console.error('Failed to create new object, with error message: ' + error.message);
     // });
+    // 'testCloudFunction'
+    AV.Cloud.run('testCloudFunction').then(function (data) {
+      console.log(data)
+    }, function (error) {
+      console.log(error)
+
+    });
+
   },
 
   /**
