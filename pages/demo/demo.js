@@ -32,24 +32,41 @@ Page({
     person.set("sex", formData.sex)
     person.set("phone", formData.phone)
     person.set("idCcard", formData.id_card)
-    person.save().then(function (person) {
-      console.log(person.toJSON())
-      wx.showToast({
-        title: '保存成功',
-        // icon: 'success'
-      })
-      self.setData({
-        loading: false
-      })
-    }, function (error) {
-      console.log("" + error)
-      wx.showToast({
-        title: '保存成功',
-      })
-      self.setData({
-        loading: false
-      })
+    // person.save().then(function (person) {
+    //   console.log(person.toJSON())
+    //   wx.showToast({
+    //     title: '保存成功',
+    //     // icon: 'success'
+    //   })
+    //   self.setData({
+    //     loading: false
+    //   })
+    // }, function (error) {
+    //   console.log("" + error)
+    //   wx.showToast({
+    //     title: '保存成功',
+    //   })
+    //   self.setData({
+    //     loading: false
+    //   })
+    // })
+    wx.request({
+      url: '127.0.0.1:8080/users',
+      data: {
+        name: formData.name
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        console.log(res)
+      },
+      fail: function (error) {
+        console.log(error)
+      }
     })
+
   },
 
   /**
